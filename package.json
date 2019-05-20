@@ -25,9 +25,10 @@
     "@nestjs/passport": "^6.1.0",
     "@nestjs/platform-express": "^6.0.0",
     "@nestjs/typeorm": "^6.1.1",
-    "mysql": "^2.17.1",
+    "chalk": "^2.4.2",
     "passport": "^0.4.0",
     "passport-http-bearer": "^1.0.1",
+    "pg": "^7.11.0",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.2",
     "rxjs": "^6.3.3",
@@ -41,9 +42,11 @@
     "@types/supertest": "^2.0.7",
     "@typescript-eslint/eslint-plugin": "^1.7.0",
     "@typescript-eslint/parser": "^1.7.0",
+    "cross-env": "^5.2.0",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.2.0",
     "eslint-plugin-prettier": "^3.0.1",
+    "husky": "^2.3.0",
     "jest": "^23.6.0",
     "nodemon": "^1.18.9",
     "prettier": "^1.17.0",
@@ -52,6 +55,12 @@
     "ts-node": "^7.0.1",
     "tsconfig-paths": "^3.7.0",
     "typescript": "^3.2.4"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint && yarn test",
+      "pre-push": "yarn lint && yarn test"
+    }
   },
   "jest": {
     "moduleFileExtensions": [

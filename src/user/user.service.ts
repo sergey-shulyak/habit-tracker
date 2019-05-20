@@ -20,6 +20,18 @@ export class UserService {
   }
 
   public create(user: IUser) {
-    this.userRepository.create(user)
+    this.userRepository.save(user)
+  }
+
+  public findById(id: string) {
+    return this.userRepository.findOne(id)
+  }
+
+  public update(id: string, userData: IUser) {
+    this.userRepository.update(id, userData)
+  }
+
+  public delete(id: string) {
+    this.userRepository.delete(id)
   }
 }
