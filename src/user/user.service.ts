@@ -1,19 +1,17 @@
 import { IUser } from './interfaces/user.interface'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { Repository } from 'typeorm'
 import { User } from './user.entity'
 
 @Injectable()
 export class UserService {
-  private userRepository: Repository<User>
+  private readonly logger = new Logger(UserService.name)
 
   public constructor(
     @InjectRepository(User)
-    userRepository: Repository<User>,
-  ) {
-    this.userRepository = userRepository
-  }
+    private readonly userRepository: Repository<User>,
+  ) {}
 
   public findAll() {
     return this.userRepository.find()
