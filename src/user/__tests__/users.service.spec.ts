@@ -2,7 +2,12 @@ import { Test } from '@nestjs/testing'
 import { UserService } from '../user.service'
 import { getRepositoryToken } from '@nestjs/typeorm'
 import { User } from '../user.entity'
-import { UserRepository as UserMockRepository } from '../__mocks__/user.repository'
+import {
+  UserRepository as UserMockRepository,
+  UserRepository,
+} from '../__mocks__/user.repository'
+import { Repository } from 'typeorm'
+import * as faker from 'faker'
 
 jest.mock('../__mocks__/user.repository')
 
@@ -28,9 +33,25 @@ describe('UserService', () => {
     },
   ]
 
+  let storage = [...TEST_DATA]
+
   let service: UserService
 
   beforeEach(async () => {
+    storage = [...TEST_DATA]
+
+    UserRepository.prototype.find = jest.fn().mockResolvedValue(storage)
+
+    UserRepository.prototype.findOne = jest
+      .fn()
+      .mockImplementation(({ id }) =>
+        Promise.resolve(storage.find(user => user.id === id)),
+      )
+
+    UserRepository.prototype.create = jest
+      .fn()
+      .mockImplementation(user => Promise.resolve(storage.push(user)))
+
     const module = await Test.createTestingModule({
       providers: [
         UserService,
@@ -49,6 +70,35 @@ describe('UserService', () => {
   })
 
   describe('findAll', () => {
-    it('should return all users from repository', async () => {})
+    it('should return all users from repository', async () => {
+      const result = await service.findAll()
+
+      expect(result).toEqual(TEST_DATA)
+    })
+  })
+
+  describe('findById', () => {
+    it('should return user from repository by id', async () => {
+      TEST_DATA.forEach(async user => {
+        expect(await service.findById(user.id)).toEqual(user)
+      })
+    })
+
+    describe('create', () => {
+      it.skip('should return user from repository by id', async () => {
+        const testUser = {
+          id: faker.random.uuid(),
+          name: faker.name.findName(),
+          email: faker.internet.email(),
+          password: faker.internet.password(8),
+        }
+
+        await service.create(testUser)
+
+        console.log(storage)
+
+        expect(storage).toContainEqual(testUser)
+      })
+    })
   })
 })
