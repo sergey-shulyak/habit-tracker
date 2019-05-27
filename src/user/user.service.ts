@@ -21,8 +21,12 @@ export class UserService {
     this.userRepository.save(user)
   }
 
-  public findById(id: string) {
+  public findOneById(id: string) {
     return this.userRepository.findOne(id)
+  }
+
+  public findOneByEmail(email: string) {
+    return this.userRepository.findOne({ email })
   }
 
   public update(id: string, userData: IUser) {
