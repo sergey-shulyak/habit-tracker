@@ -1,13 +1,13 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
-import { ExtractJwt, Strategy } from 'passport-jwt'
+import { ExtractJwt, Strategy, VerifiedCallback } from 'passport-jwt'
 
-import { JwtService } from '../jwt.service'
 import { JwtPayload } from '../interfaces/jwtPayload.interface'
+import { UserService } from 'src/user/user.service'
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  public constructor(private readonly jwtService: JwtService) {
+  public constructor(private readonly userService: UserService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       passReqToCallback: false,
@@ -15,39 +15,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     })
   }
 
-  public async validate(token: string, done: Function) {
-    // TODO: check validate api and check why user in token
-    const result = await this.jwtService.verify(token)
-    return result
-    // .then(user => done(null, user))
-    // .catch(err => done(err, false))
-  }
-}
+  public async validate(tokenPayload: JwtPayload) {
+    const user = await this.userService.findOneById(tokenPayload.id)
 
-export const callback = (err: Error, user: JwtPayload, info: any) => {
-  let message: string
-
-  if (err) {
-    return err || new UnauthorizedException(info.message)
-  } else if (typeof info != 'undefined' || !user) {
-    switch (info.message) {
-      case 'No auth token':
-      case 'invalid signature':
-      case 'jwt malformed':
-      case 'invalid token':
-      case 'invalid signature':
-        message = 'You must provide a valid authenticated access token'
-        break
-      case 'jwt expired':
-        message = 'Your session has expired'
-        break
-      default:
-        message = info.message
-        break
+    if (!user) {
+      throw new UnauthorizedException()
     }
 
-    throw new UnauthorizedException(message)
+    return user
   }
-
-  return user
 }

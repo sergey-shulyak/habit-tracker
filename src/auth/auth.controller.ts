@@ -14,16 +14,12 @@ export class AuthController {
 
   @Post('signup')
   public async signUp(@Body() userData: SignUpUserDto) {
-    const token = await this.authService.signUp(userData)
-
-    return { token }
+    return { token: await this.authService.signUp(userData) }
   }
 
   @Post('signin')
   @UseGuards(AuthGuard('local'))
   public async signIn(@Req() req: Express.Request) {
-    const token = await this.authService.signIn(req.user)
-
-    return { token }
+    return { token: await this.authService.signIn(req.user) }
   }
 }

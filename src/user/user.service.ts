@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Injectable, Logger } from '@nestjs/common'
 import { Repository } from 'typeorm'
 import { User } from './user.entity'
+import { omit } from 'ramda'
 
 @Injectable()
 export class UserService {
@@ -13,8 +14,8 @@ export class UserService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  public findAll() {
-    return this.userRepository.find()
+  public async findAll() {
+    return await this.userRepository.find()
   }
 
   public create(user: IUser) {

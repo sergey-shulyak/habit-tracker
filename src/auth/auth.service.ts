@@ -1,4 +1,5 @@
-import { Injectable, Inject } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
+
 import { UserService } from '../user/user.service'
 import { JwtService } from './jwt.service'
 import { CryptoService } from './crypto.service'
@@ -12,10 +13,6 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly cryptoService: CryptoService,
   ) {}
-
-  public async validateUser(token: string) {
-    return this.jwtService.verify(token)
-  }
 
   public async signUp(userData: IUser) {
     const { email, name, password } = userData
@@ -54,22 +51,8 @@ export class AuthService {
   }
 
   public async signIn(user: IUser) {
-    return {
-      token: await this.jwtService.sign({ email: user.email }),
-    }
+    const { id, email, name } = user
 
-    // const user = await this.userService.findOneByEmail(email)
-
-    // if (!user) {
-    //   throw new UserNotFoundError()
-    // }
-
-    // const passwordsMatch = this.cryptoService.verify(password, user.password)
-
-    // if (!passwordsMatch) {
-    //   throw new InvalidCredentialsError()
-    // }
-
-    // return user
+    return await this.jwtService.sign({ id, email, name })
   }
 }

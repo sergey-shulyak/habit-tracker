@@ -10,19 +10,9 @@ const sign = promisify(jwt.sign) as (
   arg2: jwt.Secret,
 ) => Promise<string>
 
-const verify = promisify(jwt.verify) as (
-  token: string,
-  secretOrPublicKey: string | Buffer,
-  options?: jwt.VerifyOptions,
-) => Promise<string | object>
-
 @Injectable()
 export class JwtService {
   public sign(user: JwtPayload) {
     return sign(user, process.env.AUTH_JWT_SECRET)
-  }
-
-  public verify(token: string) {
-    return verify(token, process.env.AUTH_JWT_SECRET)
   }
 }

@@ -9,12 +9,7 @@ import { JwtService } from './jwt.service'
 import { CryptoService } from './crypto.service'
 
 @Module({
-  imports: [
-    PassportModule.register({
-      defaultStrategy: 'jwt',
-    }),
-    UserModule,
-  ],
+  imports: [PassportModule, UserModule],
   providers: [
     AuthService,
     LocalStrategy,

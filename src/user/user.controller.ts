@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  Inject,
   Post,
   Param,
   Put,
@@ -15,16 +14,14 @@ import { UpdateUserDto } from './dto/updateUser.dto'
 import { CreateUserDto } from './dto/createUser.dto'
 import { UserService } from './user.service'
 import { AuthGuard } from '@nestjs/passport'
+import { UserNotFoundError } from './errors'
 
 @Controller('users')
 export class UserController {
-  public constructor(
-    @Inject(UserService)
-    private readonly userService: UserService,
-  ) {}
+  public constructor(private readonly userService: UserService) {}
 
   @Get()
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard())
   public findAll() {
     return this.userService.findAll()
   }
@@ -35,20 +32,26 @@ export class UserController {
   }
 
   @Get(':id')
-  @UseGuards(AuthGuard('jwt'))
-  public findOne(@Param('id') id: string) {
-    return this.userService.findOneById(id)
+  @UseGuards(AuthGuard())
+  public async findOne(@Param('id') id: string) {
+    const user = await this.userService.findOneById(id)
+
+    if (!user) {
+      throw new UserNotFoundError()
+    }
+
+    return user
   }
 
   @Put(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard())
   public updateOne(@Param('id') id: string, @Body() user: UpdateUserDto) {
     this.userService.update(id, user)
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard())
   public deleteOne(@Param('id') id: string) {
     this.userService.delete(id)
   }
