@@ -1,9 +1,9 @@
+import { Injectable, Logger } from '@nestjs/common'
+
 import { IUser } from './interfaces/user.interface'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Injectable, Logger } from '@nestjs/common'
 import { Repository } from 'typeorm'
 import { User } from './user.entity'
-import { omit } from 'ramda'
 
 @Injectable()
 export class UserService {
