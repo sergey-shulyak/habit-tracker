@@ -3,6 +3,7 @@ import { UserService } from '../user/user.service'
 import { JwtService } from './jwt.service'
 import { CryptoService } from './crypto.service'
 import { IUser } from 'src/user/interfaces/user.interface'
+import { UserNotFoundError, InvalidCredentialsError } from './errors'
 
 @Injectable()
 export class AuthService {
@@ -25,21 +26,50 @@ export class AuthService {
       password: await this.cryptoService.hash(password),
     }
 
-    await this.userService.create(user)
+    // TODO: Check if exist in exception from uniq
+    const createdUser = await this.userService.create(user)
 
     // TODO: Send email
+
+    return this.jwtService.sign(createdUser)
   }
 
-  public async signIn(email: string, password: string) {
+  public async verifyUser(email: string, password: string) {
     const user = await this.userService.findOneByEmail(email)
 
-    const passwordsMatch = this.cryptoService.verify(password, user.password)
-
-    if (!passwordsMatch) {
-      // throw error
-      return
+    if (!user) {
+      throw new UserNotFoundError()
     }
 
-    return this.jwtService.sign({ email })
+    const passwordsMatch = await this.cryptoService.verify(
+      password,
+      user.password,
+    )
+
+    if (!passwordsMatch) {
+      throw new InvalidCredentialsError()
+    }
+
+    return user
+  }
+
+  public async signIn(user: IUser) {
+    return {
+      token: await this.jwtService.sign({ email: user.email }),
+    }
+
+    // const user = await this.userService.findOneByEmail(email)
+
+    // if (!user) {
+    //   throw new UserNotFoundError()
+    // }
+
+    // const passwordsMatch = this.cryptoService.verify(password, user.password)
+
+    // if (!passwordsMatch) {
+    //   throw new InvalidCredentialsError()
+    // }
+
+    // return user
   }
 }

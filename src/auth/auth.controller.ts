@@ -1,24 +1,29 @@
-import { Controller, Post, Inject, Body, UseGuards } from '@nestjs/common'
+import { Controller, Post, Body, UseGuards, Req, Res } from '@nestjs/common'
 import { AuthService } from './auth.service'
-import { SignInCredentialsDto } from './dto/signIn.dto'
-import { CreateUserDto } from 'src/user/dto/user.dto'
-import { User } from 'src/user/user.entity'
+import { AuthGuard } from '@nestjs/passport'
+import { callback } from './strategies/local.strategy'
 import { CryptoService } from './crypto.service'
+import { SignUpUserDto } from './dto/signUpUser.dto'
 
 @Controller('auth')
 export class AuthController {
-  public constructor(private readonly authService: AuthService) {}
+  public constructor(
+    private readonly authService: AuthService,
+    private readonly cryptoService: CryptoService,
+  ) {}
 
   @Post('signup')
-  public async signUp(@Body() userData: CreateUserDto) {
-    this.authService.signUp(userData)
+  public async signUp(@Body() userData: SignUpUserDto) {
+    const token = await this.authService.signUp(userData)
+
+    return { token }
   }
 
   @Post('signin')
-  public async signIn(@Body() credentials: SignInCredentialsDto) {
-    const authToken = await this.authService.signIn(
-      credentials.email,
-      credentials.password,
-    )
+  @UseGuards(AuthGuard('local'))
+  public async signIn(@Req() req: Express.Request) {
+    const token = await this.authService.signIn(req.user)
+
+    return { token }
   }
 }

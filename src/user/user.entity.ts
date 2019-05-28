@@ -17,7 +17,7 @@ export class User {
   @Column({ length: 40 })
   public name: string
 
-  @Column({ length: 24 })
+  @Column()
   public password: string
 
   @CreateDateColumn()

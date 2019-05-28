@@ -16,8 +16,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   public async validate(token: string, done: Function) {
-    const signedUserData = await this.jwtService.verify(token)
-    done(null, signedUserData)
+    // TODO: check validate api and check why user in token
+    const result = await this.jwtService.verify(token)
+    return result
+    // .then(user => done(null, user))
+    // .catch(err => done(err, false))
   }
 }
 

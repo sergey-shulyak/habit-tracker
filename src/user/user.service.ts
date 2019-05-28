@@ -18,7 +18,7 @@ export class UserService {
   }
 
   public create(user: IUser) {
-    this.userRepository.save(user)
+    return this.userRepository.save(user)
   }
 
   public findOneById(id: string) {

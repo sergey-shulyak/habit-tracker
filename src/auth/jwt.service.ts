@@ -18,11 +18,11 @@ const verify = promisify(jwt.verify) as (
 
 @Injectable()
 export class JwtService {
-  public async sign(user: JwtPayload) {
+  public sign(user: JwtPayload) {
     return sign(user, process.env.AUTH_JWT_SECRET)
   }
 
-  public async verify(token: string) {
+  public verify(token: string) {
     return verify(token, process.env.AUTH_JWT_SECRET)
   }
 }

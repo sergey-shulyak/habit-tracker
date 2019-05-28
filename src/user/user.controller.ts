@@ -11,7 +11,8 @@ import {
   HttpCode,
   UseGuards,
 } from '@nestjs/common'
-import { CreateUserDto, UpdateUserDto } from './dto/user.dto'
+import { UpdateUserDto } from './dto/updateUser.dto'
+import { CreateUserDto } from './dto/createUser.dto'
 import { UserService } from './user.service'
 import { AuthGuard } from '@nestjs/passport'
 
@@ -23,7 +24,7 @@ export class UserController {
   ) {}
 
   @Get()
-  @UseGuards(AuthGuard('bearer'))
+  @UseGuards(AuthGuard('jwt'))
   public findAll() {
     return this.userService.findAll()
   }
@@ -34,20 +35,20 @@ export class UserController {
   }
 
   @Get(':id')
-  @UseGuards(AuthGuard('bearer'))
+  @UseGuards(AuthGuard('jwt'))
   public findOne(@Param('id') id: string) {
     return this.userService.findOneById(id)
   }
 
   @Put(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @UseGuards(AuthGuard('bearer'))
+  @UseGuards(AuthGuard('jwt'))
   public updateOne(@Param('id') id: string, @Body() user: UpdateUserDto) {
     this.userService.update(id, user)
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard('bearer'))
+  @UseGuards(AuthGuard('jwt'))
   public deleteOne(@Param('id') id: string) {
     this.userService.delete(id)
   }
