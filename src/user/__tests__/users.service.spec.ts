@@ -6,13 +6,13 @@ import {
   UserRepository as UserMockRepository,
   UserRepository,
 } from '../__mocks__/user.repository'
-import { Repository } from 'typeorm'
 import * as faker from 'faker'
+import { IUser } from '../interfaces/user.interface'
 
 jest.mock('../__mocks__/user.repository')
 
 describe('UserService', () => {
-  const TEST_DATA = [
+  const TEST_DATA: IUser[] = [
     {
       id: '63ec5909-91db-416d-8858-10d36b8c5631',
       email: 'feppemaffyhi-1473@yopmail.com',
@@ -38,19 +38,19 @@ describe('UserService', () => {
   let service: UserService
 
   beforeEach(async () => {
-    storage = [...TEST_DATA]
+    // storage = [...TEST_DATA]
 
     UserRepository.prototype.find = jest.fn().mockResolvedValue(storage)
 
     UserRepository.prototype.findOne = jest
       .fn()
-      .mockImplementation(({ id }) =>
+      .mockImplementation(id =>
         Promise.resolve(storage.find(user => user.id === id)),
       )
 
     UserRepository.prototype.create = jest
       .fn()
-      .mockImplementation(user => Promise.resolve(storage.push(user)))
+      .mockImplementation((user: IUser) => Promise.resolve(storage.push(user)))
 
     const module = await Test.createTestingModule({
       providers: [
@@ -80,7 +80,7 @@ describe('UserService', () => {
   describe('findById', () => {
     it('should return user from repository by id', async () => {
       TEST_DATA.forEach(async user => {
-        expect(await service.findById(user.id)).toEqual(user)
+        expect(await service.findOneById(user.id)).toEqual(user)
       })
     })
 
@@ -93,9 +93,8 @@ describe('UserService', () => {
           password: faker.internet.password(8),
         }
 
-        await service.create(testUser)
-
-        console.log(storage)
+        const result = await service.create(testUser)
+        console.log(result)
 
         expect(storage).toContainEqual(testUser)
       })
