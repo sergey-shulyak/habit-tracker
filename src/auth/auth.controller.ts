@@ -1,16 +1,12 @@
-import { Controller, Post, Body, UseGuards, Req, Res } from '@nestjs/common'
-import { AuthService } from './auth.service'
+import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common'
+
 import { AuthGuard } from '@nestjs/passport'
-import { callback } from './strategies/local.strategy'
-import { CryptoService } from './crypto.service'
+import { AuthService } from './auth.service'
 import { SignUpUserDto } from './dto/signUpUser.dto'
 
 @Controller('auth')
 export class AuthController {
-  public constructor(
-    private readonly authService: AuthService,
-    private readonly cryptoService: CryptoService,
-  ) {}
+  public constructor(private readonly authService: AuthService) {}
 
   @Post('signup')
   public async signUp(@Body() userData: SignUpUserDto) {

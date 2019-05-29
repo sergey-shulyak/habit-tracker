@@ -1,9 +1,9 @@
 import { Test } from '@nestjs/testing'
-import { getRepositoryToken } from '@nestjs/typeorm'
 import { User } from '../user.entity'
-import { UserService } from '../user.service'
 import { UserController } from '../user.controller'
 import { UserRepository as UserMockRepository } from '../__mocks__/user.repository'
+import { UserService } from '../user.service'
+import { getRepositoryToken } from '@nestjs/typeorm'
 
 describe('Users Controller', () => {
   let controller: UserController
@@ -12,11 +12,11 @@ describe('Users Controller', () => {
     const module = await Test.createTestingModule({
       controllers: [UserController],
       providers: [
-        UserService,
         {
           provide: getRepositoryToken(User),
           useValue: new UserMockRepository(),
         },
+        UserService,
       ],
     }).compile()
 

@@ -1,7 +1,6 @@
-import { Injectable } from '@nestjs/common'
-import { UserService } from '../user/user.service'
-import { IUser } from 'src/user/interfaces/user.interface'
 import * as jwt from 'jsonwebtoken'
+
+import { Injectable } from '@nestjs/common'
 import { JwtPayload } from './interfaces/jwtPayload.interface'
 import { promisify } from 'util'
 

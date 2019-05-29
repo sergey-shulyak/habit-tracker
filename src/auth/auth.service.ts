@@ -1,10 +1,15 @@
-import { Injectable } from '@nestjs/common'
+import {
+  InvalidCredentialsError,
+  UserConflictError,
+  UserNotFoundError,
+} from './errors'
 
-import { UserService } from '../user/user.service'
-import { JwtService } from './jwt.service'
 import { CryptoService } from './crypto.service'
 import { IUser } from 'src/user/interfaces/user.interface'
-import { UserNotFoundError, InvalidCredentialsError } from './errors'
+import { Injectable } from '@nestjs/common'
+import { JwtService } from './jwt.service'
+import { MailService } from '../mail/mail.service'
+import { UserService } from '../user/user.service'
 
 @Injectable()
 export class AuthService {
@@ -12,6 +17,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
     private readonly cryptoService: CryptoService,
+    private readonly mailService: MailService,
   ) {}
 
   public async signUp(userData: IUser) {
@@ -23,10 +29,15 @@ export class AuthService {
       password: await this.cryptoService.hash(password),
     }
 
-    // TODO: Check if exist in exception from uniq
-    const createdUser = await this.userService.create(user)
+    let createdUser
+    try {
+      createdUser = await this.userService.create(user)
+    } catch (err) {
+      // TODO: Add detail of field
+      throw new UserConflictError()
+    }
 
-    // TODO: Send email
+    await this.mailService.sendRegistrationConfirmation(createdUser)
 
     return this.jwtService.sign(createdUser)
   }

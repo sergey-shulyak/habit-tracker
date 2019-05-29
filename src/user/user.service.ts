@@ -37,4 +37,8 @@ export class UserService {
   public delete(id: string) {
     this.userRepository.delete(id)
   }
+
+  public confirmEmail(id: string) {
+    this.userRepository.update({ id }, { isEmailConfirmed: true })
+  }
 }
