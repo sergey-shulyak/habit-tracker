@@ -1,20 +1,23 @@
 import {
   Body,
   Controller,
-  Get,
-  Post,
-  Param,
-  Put,
   Delete,
-  HttpStatus,
+  Get,
   HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+  Query,
+  Req,
   UseGuards,
 } from '@nestjs/common'
-import { UpdateUserDto } from './dto/updateUser.dto'
-import { CreateUserDto } from './dto/createUser.dto'
-import { UserService } from './user.service'
+
 import { AuthGuard } from '@nestjs/passport'
+import { CreateUserDto } from './dto/createUser.dto'
+import { UpdateUserDto } from './dto/updateUser.dto'
 import { UserNotFoundError } from './errors'
+import { UserService } from './user.service'
 
 @Controller('users')
 export class UserController {
@@ -54,5 +57,10 @@ export class UserController {
   @UseGuards(AuthGuard())
   public deleteOne(@Param('id') id: string) {
     this.userService.delete(id)
+  }
+
+  @Get('/confirm/:id')
+  public confirmEmail(@Param('id') id: string) {
+    this.userService.confirmEmail(id)
   }
 }
