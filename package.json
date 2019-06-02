@@ -18,6 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:ci": "jest --ci --runInBand --reporters=default --reporters=jest-junit",
     "snyk-protect": "snyk protect",
     "prepublish": "npm run snyk-protect"
   },
@@ -73,6 +74,7 @@
     "faker": "^4.1.0",
     "husky": "^2.3.0",
     "jest": "^23.6.0",
+    "jest-junit": "^6.4.0",
     "nodemon": "^1.18.9",
     "prettier": "^1.17.0",
     "supertest": "^3.4.1",
