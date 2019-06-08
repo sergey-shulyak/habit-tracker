@@ -5,7 +5,7 @@ import {
 } from './errors'
 
 import { CryptoService } from './crypto.service'
-import { IUser } from 'src/user/interfaces/user.interface'
+import { IUser } from '../user/interfaces/user.interface'
 import { Injectable } from '@nestjs/common'
 import { JwtService } from './jwt.service'
 import { MailService } from '../mail/mail.service'

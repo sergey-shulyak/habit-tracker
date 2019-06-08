@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { Transporter, createTransport } from 'nodemailer'
 
-import { IUser } from 'src/user/interfaces/user.interface'
+import { IUser } from '../user/interfaces/user.interface'
 import { InvalidEmailProvidedError } from './errors'
 import { OAuth2Client } from 'googleapis-common'
 import { google } from 'googleapis'

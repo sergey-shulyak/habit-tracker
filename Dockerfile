@@ -1,30 +1,43 @@
 # Build
-FROM node:12-alpine AS builder
+FROM node:12-alpine AS base
 
-WORKDIR /home/node/app
+WORKDIR /app
 
+# COPY package.json yarn.lock ./
+# COPY src/ ./src
 COPY . .
 
-ENV SNYK_TOKEN=$SNYK_TOKEN
+RUN ls && yarn --prod --frozen-lockfile
+# RUN npm ci \
+    # && npm run lint \
+    # && npm run test:ci \
+    # && npm run build
 
-RUN echo "Snyk token: ${SNYK_TOKEN}"
 
-RUN npm i -g yarn && \
-    yarn install --frozen-lockfile && \
-    yarn build
+# RUN yarn install --frozen-lockfile \
+    # && yarn lint \
+    # && yarn test:ci \
+    # && yarn build
 
-# Run
-FROM node:12-alpine
+FROM base as test
 
-ENV NODE_ENV=production
-WORKDIR /home/node/app
+RUN yarn --frozen-lockfile \
+    && yarn lint \
+    && yarn test:ci
 
-COPY package.json yarn.lock ./
 
-RUN yarn install --frozen-lockfile
+FROM test as build
 
-COPY --chown=builder /home/node/app/build ./build
+RUN yarn build
 
-EXPOSE 3000
 
-CMD ["yarn", "start:prod"]
+FROM node:12-alpine as runner
+
+WORKDIR /app
+
+COPY --from=base /app/node_modules node_modules
+COPY --from=build /app/dist dist
+
+EXPOSE $PORT
+
+CMD ["node", "dist/main.js"]

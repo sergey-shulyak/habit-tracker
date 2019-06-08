@@ -1,22 +1,59 @@
-version: '3.5'
+version: '3.7'
 
 services:
-  db:
+  habit-tracker-db:
     image: 'postgres:11.3-alpine'
+    container_name: habit_tracker_pg
     restart: 'always'
-    ports:
-      - '5432:5432'
+
     environment:
-      POSTGRES_USER: 'habit_tracker'
-      POSTGRES_PASSWORD: 'CWT7Dk2ayp8u'
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+    networks:
+      - habit-tracker-network
 
   habit-tracker:
-    build: .
-    command: yarn start:debug
-    volumes:
-      - './src:/home/node/app/src'
-    env_file: .env
-    environment:
-     - SNYK_TOKEN=${SNYK_TOKEN}
     depends_on:
-      - db
+      - habit-tracker-db
+
+    ports:
+      - "${PORT}:${PORT}"
+
+    build: .
+    container_name: habit_tracker
+    restart: unless-stopped
+
+    environment:
+      - PORT
+      - TYPEORM_CONNECTION
+      - TYPEORM_HOST
+      - TYPEORM_USERNAME
+      - TYPEORM_PASSWORD
+      - TYPEORM_DATABASE
+      - TYPEORM_PORT
+      - TYPEORM_SYNCHRONIZE
+      - TYPEORM_LOGGING
+      - TYPEORM_ENTITIES
+      - AUTH_JWT_SECRET
+      - AUTH_SALT_ROUNDS
+
+    command: node dist/main.js
+
+    volumes:
+      - './:/home/node/app'
+      - node_modules:/home/node/app/node_modules
+
+    networks:
+      - habit-tracker-network
+
+networks:
+  habit-tracker-network:
+    driver: bridge
+
+volumes:
+  pgdata:
+  node_modules:

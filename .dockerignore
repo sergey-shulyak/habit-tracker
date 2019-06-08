@@ -59,3 +59,7 @@ dist/
 .yarn-integrity
 .vscode/*
 .history
+
+.gitignore
+.git
+.env
