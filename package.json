@@ -5,6 +5,10 @@
   "author": "Sergey Shulyak",
   "repository": "https://github.com/sergey-shulyak/habit-tracker.git",
   "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsc -p tsconfig.build.json",
@@ -76,6 +80,7 @@
     "husky": "^2.3.0",
     "jest": "^23.6.0",
     "jest-junit": "^6.4.0",
+    "lerna": "^3.15.0",
     "nodemon": "^1.18.9",
     "prettier": "^1.17.0",
     "snyk": "^1.169.2",
