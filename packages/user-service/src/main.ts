@@ -1,8 +1,8 @@
-import { Module } from '@nestjs/common'
-import { TypeOrmModule } from '@nestjs/typeorm'
-import { UserModule } from './user/user.module'
+import { NestFactory } from '@nestjs/core'
+import { AppModule } from './app.module'
 
-@Module({
-  imports: [TypeOrmModule.forRoot(), UserModule],
-})
-export class AppModule {}
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule)
+  await app.listen(3000)
+}
+bootstrap()
