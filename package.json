@@ -10,7 +10,7 @@
     "packages/*"
   ],
   "scripts": {
-    "start:docker": "docker-compose -f docker-compose.dev.yml up -d",
+    "start:docker": "docker-compose -f docker-compose.dev.yml up",
     "stop:docker": "docker-compose -f docker-compose.dev.yml down",
     "snyk-protect": "snyk protect"
   },

@@ -1,9 +1,8 @@
 version: '3.7'
 
 services:
-  habit-tracker-db:
+  db:
     image: 'postgres:11.3-alpine'
-    container_name: habit_tracker_pg
     restart: 'always'
 
     ports:
@@ -15,6 +14,10 @@ services:
 
     volumes:
       - pgdata:/var/lib/postgresql/data
+
+
+  message-broker:
+    image: 'rabbitmq:3.7-alpine'
 
 volumes:
   pgdata:
