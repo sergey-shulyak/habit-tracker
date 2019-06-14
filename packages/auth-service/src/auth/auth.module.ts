@@ -4,7 +4,7 @@ import { JwtService } from './jwt.service';
 import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { ClientsModule } from '@nestjs/microservices';
-import { USER_SERVICE } from '@habit-tracker/shared';
+import { USER_SERVICE, MAIL_SERVICE } from '@habit-tracker/shared';
 import { Transport } from '@nestjs/common/enums/transport.enum';
 
 @Module({
@@ -12,6 +12,10 @@ import { Transport } from '@nestjs/common/enums/transport.enum';
     ClientsModule.register([
       {
         name: USER_SERVICE,
+        transport: Transport.TCP,
+      },
+      {
+        name: MAIL_SERVICE,
         transport: Transport.TCP,
       },
     ]),

@@ -4,9 +4,8 @@ import { ClientsModule, Transport } from '@nestjs/microservices'
 import { USER_SERVICE } from '@habit-tracker/shared/user'
 import { AUTH_SERVICE } from '@habit-tracker/shared/auth'
 
-import { LocalStrategy } from './strategies/local.strategy';
-import { JwtStrategy } from './strategies/jwt.strategy';
-
+import { LocalStrategy } from './authStrategies/local.strategy'
+import { JwtStrategy } from './authStrategies/jwt.strategy'
 import { AuthController } from './auth/auth.controller'
 import { UserController } from './user/user.controller'
 
@@ -23,14 +22,11 @@ import { UserController } from './user/user.controller'
       },
       {
         name: AUTH_SERVICE,
-        transport: Transport.TCP
-      }
+        transport: Transport.TCP,
+      },
     ]),
   ],
-  providers: [
-    LocalStrategy,
-    JwtStrategy,
-  ],
+  providers: [LocalStrategy, JwtStrategy],
   controllers: [AuthController, UserController],
 })
 export class AppModule {}

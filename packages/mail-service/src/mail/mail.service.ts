@@ -1,10 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { Transporter, createTransport } from 'nodemailer'
-
-import { IUser } from '../user/interfaces/user.interface'
-import { InvalidEmailProvidedError } from './errors'
 import { OAuth2Client } from 'googleapis-common'
 import { google } from 'googleapis'
+import { validate as isEmailValid } from 'email-validator'
+import { IUser, InvalidEmailProvidedError } from '@habit-tracker/shared'
 
 const OAuth2 = google.auth.OAuth2
 
@@ -48,8 +47,7 @@ export class MailService {
   }
 
   public async sendRegistrationConfirmation(user: IUser) {
-    if (!user.email) {
-      // TODO: Check email validity
+    if (!user.email || !isEmailValid(user.email)) {
       throw new InvalidEmailProvidedError()
     }
 
@@ -58,13 +56,11 @@ export class MailService {
       from: 'sender@email.com',
       to: user.email,
       subject: 'Confirm your email',
-      html: `<a href="http://localhost:3000/users/confirm/${
-        user.id
-      }">Confirm email</a>`,
+      html: `<a href="http://localhost:3000/users/confirm/${user.id}">Confirm email</a>`,
     }
 
     const transporter = await this.createTransporter()
-    const info = await transporter.sendMail(mailOptions)
+    await transporter.sendMail(mailOptions)
 
     Logger.log(`Sent email confirmation`)
   }
