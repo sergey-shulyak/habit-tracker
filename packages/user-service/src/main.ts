@@ -4,8 +4,9 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice(AppModule, {
-    transport: Transport.RMQ,
+    transport: Transport.TCP,
   });
   app.listen(() => console.log('User Service is listening'))
 }
+
 bootstrap();
