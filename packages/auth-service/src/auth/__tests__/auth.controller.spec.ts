@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing'
 
-import { AuthController } from '../auth.controller'
+import { AuthController } from '../../../../api-gateway/src/auth/auth.controller'
 import { AuthService } from '../auth.service'
 
 describe.skip('Auth Controller', () => {

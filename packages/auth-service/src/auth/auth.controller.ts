@@ -1,21 +1,20 @@
 import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common'
 
-import { AuthGuard } from '@nestjs/passport'
 import { AuthService } from './auth.service'
-import { SignUpUserDto } from './dto/signUpUser.dto'
+import { SignUpUserDto, IUser } from '@habit-tracker/shared'
+import { MessagePattern } from '@nestjs/microservices';
 
-@Controller('auth')
+@Controller()
 export class AuthController {
   public constructor(private readonly authService: AuthService) {}
 
-  @Post('signup')
+  @MessagePattern('signUp')
   public async signUp(@Body() userData: SignUpUserDto) {
     return { token: await this.authService.signUp(userData) }
   }
 
-  @Post('signin')
-  @UseGuards(AuthGuard('local'))
-  public async signIn(@Req() req: Express.Request) {
-    return { token: await this.authService.signIn(req.user) }
+  @MessagePattern('signIn')
+  public async signIn(user: IUser) {
+    return { token: await this.authService.signIn(user) }
   }
 }

@@ -5,19 +5,19 @@ import {
 } from './errors';
 
 import { CryptoService } from './crypto.service';
-import { IUser } from '../user/interfaces/user.interface';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { JwtService } from './jwt.service';
-import { MailService } from '../../../mail-service/src/mail/mail.service';
-import { UserService } from '../user/user.service';
+import { IUser, USER_SERVICE } from '@habit-tracker/shared';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class AuthService {
   public constructor(
-    private readonly userService: UserService,
+    // private readonly userService: UserService,
+    @Inject(USER_SERVICE) private readonly userService: ClientProxy,    
     private readonly jwtService: JwtService,
     private readonly cryptoService: CryptoService,
-    private readonly mailService: MailService,
+    // private readonly mailService: MailService,
   ) {}
 
   public async signUp(userData: IUser) {
@@ -31,19 +31,19 @@ export class AuthService {
 
     let createdUser;
     try {
-      createdUser = await this.userService.create(user);
+      createdUser = await this.userService.send('create',user);
     } catch (err) {
       // TODO: Add detail of field
       throw new UserConflictError();
     }
 
-    await this.mailService.sendRegistrationConfirmation(createdUser);
+    // await this.mailService.sendRegistrationConfirmation(createdUser);
 
     return this.jwtService.sign(createdUser);
   }
 
   public async verifyUser(email: string, password: string) {
-    const user = await this.userService.findOneByEmail(email);
+    const user: IUser = await this.userService.send('findOneByEmail', email).toPromise();
 
     if (!user) {
       throw new UserNotFoundError();

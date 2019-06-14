@@ -1,14 +1,14 @@
 import { ExtractJwt, Strategy } from 'passport-jwt'
 import { Injectable, UnauthorizedException, Inject } from '@nestjs/common'
 
-import { JwtPayload } from '@habit-tracker/shared/auth'
+import { JwtPayload, USER_SERVICE } from '@habit-tracker/shared'
 import { PassportStrategy } from '@nestjs/passport'
-import { ClientProxy } from '@nestjs/microservices';
+import { ClientProxy } from '@nestjs/microservices'
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   public constructor(
-    @Inject('USER_SERVICE') private readonly userService: ClientProxy,
+    @Inject(USER_SERVICE) private readonly userService: ClientProxy,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

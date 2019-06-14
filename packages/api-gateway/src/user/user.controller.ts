@@ -12,20 +12,23 @@ import {
   Inject,
 } from '@nestjs/common'
 
-// import { AuthGuard } from '@nestjs/passport';
+import { AuthGuard } from '@nestjs/passport'
 import { ClientProxy } from '@nestjs/microservices'
-import { CreateUserDto, UpdateUserDto, UserNotFoundError } from '@habit-tracker/shared/user'
-
-// import { UserNotFoundError } from './errors';
+import {
+  CreateUserDto,
+  UpdateUserDto,
+  UserNotFoundError,
+  USER_SERVICE
+} from '@habit-tracker/shared/user'
 
 @Controller('users')
 export class UserController {
   public constructor(
-    @Inject('USER_SERVICE') private readonly userService: ClientProxy,
+    @Inject(USER_SERVICE) private readonly userService: ClientProxy,
   ) {}
 
   @Get()
-  // @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard())
   public async findAll() {
     return await this.userService.send('findAll', '')
   }
@@ -36,14 +39,12 @@ export class UserController {
   }
 
   @Get(':id')
-  // @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard())
   public async findOne(@Param('id') id: string) {
-    // const user = await this.userService.findOneById(id)
     const user = await this.userService.send('findOneById', id)
 
-
     if (!user) {
-      throw new UserNotFoundError();
+      throw new UserNotFoundError()
     }
 
     return user
@@ -51,17 +52,15 @@ export class UserController {
 
   @Put(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  // @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard())
   public updateOne(@Param('id') id: string, @Body() user: UpdateUserDto) {
-    // this.userService.update(id, user)
-    // this.userService.send('update', {id, data})
+    this.userService.send('update', { id, user })
   }
 
   @Delete(':id')
-  // @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard())
   public deleteOne(@Param('id') id: string) {
     this.userService.send('delete', id)
-
   }
 
   @Get('/confirm/:id')

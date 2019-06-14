@@ -1,8 +1,8 @@
 import * as jwt from 'jsonwebtoken'
 
 import { Injectable } from '@nestjs/common'
-import { JwtPayload } from './interfaces/jwtPayload.interface'
 import { promisify } from 'util'
+import { JwtPayload } from '@habit-tracker/shared/auth';
 
 const sign = promisify(jwt.sign) as (
   arg1: string | object | Buffer,
