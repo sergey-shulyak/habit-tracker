@@ -1,12 +1,15 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common'
+import { Injectable, UnauthorizedException, Inject } from '@nestjs/common'
 
-// import { AuthService } from '@habit-tracker/api-gateway'
 import { PassportStrategy } from '@nestjs/passport'
 import { Strategy } from 'passport-local'
+import { AUTH_SERVICE } from '@habit-tracker/shared'
+import { ClientProxy } from '@nestjs/microservices'
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
-  public constructor(private readonly authService: AuthService) {
+  public constructor(
+    @Inject(AUTH_SERVICE) private readonly authService: ClientProxy,
+  ) {
     super({
       usernameField: 'email',
       passwordField: 'password',
@@ -15,6 +18,6 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   }
 
   public validate(email: string, password: string) {
-    return this.authService.verifyUser(email, password)
+    return this.authService.send('verifyUser', { email, password })
   }
 }

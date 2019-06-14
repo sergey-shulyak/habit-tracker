@@ -11,13 +11,13 @@ export class AuthController {
   ) {}
 
   @Post('signUp')
-  public async signUp(@Body() userData: SignUpUserDto) {
-    return { token: await this.authService.send('signUp', userData) }
+  public signUp(@Body() userData: SignUpUserDto) {
+    return this.authService.send('signUp', userData)
   }
 
   @Post('signIn')
   @UseGuards(AuthGuard('local'))
-  public async signIn(@Req() req: { user: IUser }) {
-    return { token: await this.authService.send('signIn', req.user) }
+  public signIn(@Req() req: { user: IUser }) {
+    return this.authService.send('signIn', req.user)
   }
 }
