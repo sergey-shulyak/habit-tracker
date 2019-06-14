@@ -6,9 +6,6 @@
   "repository": "https://github.com/sergey-shulyak/habit-tracker.git",
   "license": "MIT",
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
     "start:docker": "docker-compose -f docker-compose.dev.yml up",
     "stop:docker": "docker-compose -f docker-compose.dev.yml down",
@@ -24,8 +21,6 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lerna run lint",
-      "pre-push": "lerna run lint && lerna run test:ci"
     }
   },
   "snyk": true

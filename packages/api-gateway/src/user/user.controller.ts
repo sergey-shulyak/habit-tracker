@@ -9,56 +9,63 @@ import {
   Post,
   Put,
   UseGuards,
-} from '@nestjs/common';
+  Inject,
+} from '@nestjs/common'
 
 // import { AuthGuard } from '@nestjs/passport';
-import { CreateUserDto } from './dto/createUser.dto';
-import { UpdateUserDto } from './dto/updateUser.dto';
+import { ClientProxy } from '@nestjs/microservices'
+import { CreateUserDto, UpdateUserDto, UserNotFoundError } from '@habit-tracker/shared/user'
+
 // import { UserNotFoundError } from './errors';
-// import { UserService } from './user.service';
 
 @Controller('users')
 export class UserController {
-  public constructor(private readonly userService: UserService) {}
+  public constructor(
+    @Inject('USER_SERVICE') private readonly userService: ClientProxy,
+  ) {}
 
   @Get()
   // @UseGuards(AuthGuard())
-  public findAll() {
-    return this.userService.findAll();
+  public async findAll() {
+    return await this.userService.send('findAll', '')
   }
 
   @Post()
   public create(@Body() user: CreateUserDto) {
-    this.userService.create(user);
+    this.userService.send('create', user)
   }
 
   @Get(':id')
   // @UseGuards(AuthGuard())
   public async findOne(@Param('id') id: string) {
-    const user = await this.userService.findOneById(id);
+    // const user = await this.userService.findOneById(id)
+    const user = await this.userService.send('findOneById', id)
 
-    // if (!user) {
-    //   throw new UserNotFoundError();
-    // }
 
-    return user;
+    if (!user) {
+      throw new UserNotFoundError();
+    }
+
+    return user
   }
 
   @Put(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   // @UseGuards(AuthGuard())
   public updateOne(@Param('id') id: string, @Body() user: UpdateUserDto) {
-    this.userService.update(id, user);
+    // this.userService.update(id, user)
+    // this.userService.send('update', {id, data})
   }
 
   @Delete(':id')
   // @UseGuards(AuthGuard())
   public deleteOne(@Param('id') id: string) {
-    this.userService.delete(id);
+    this.userService.send('delete', id)
+
   }
 
   @Get('/confirm/:id')
   public confirmEmail(@Param('id') id: string) {
-    this.userService.confirmEmail(id);
+    this.userService.send('confirmEmail', id)
   }
 }

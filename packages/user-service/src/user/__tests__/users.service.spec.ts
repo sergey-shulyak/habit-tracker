@@ -5,7 +5,7 @@ import {
   UserRepository,
 } from '../__mocks__/user.repository'
 
-import { IUser } from '../interfaces/user.interface'
+import { IUser } from '../../../../shared/src/user/interfaces/user.interface'
 import { Test } from '@nestjs/testing'
 import { User } from '../user.entity'
 import { UserService } from '../user.service'

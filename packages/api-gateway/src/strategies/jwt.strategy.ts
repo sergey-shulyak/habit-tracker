@@ -1,13 +1,15 @@
 import { ExtractJwt, Strategy } from 'passport-jwt'
-import { Injectable, UnauthorizedException } from '@nestjs/common'
+import { Injectable, UnauthorizedException, Inject } from '@nestjs/common'
 
-import { JwtPayload } from '../interfaces/jwtPayload.interface'
+import { JwtPayload } from '@habit-tracker/shared/auth'
 import { PassportStrategy } from '@nestjs/passport'
-import { UserService } from '../../user/user.service'
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  public constructor(private readonly userService: UserService) {
+  public constructor(
+    @Inject('USER_SERVICE') private readonly userService: ClientProxy,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       passReqToCallback: false,
@@ -16,7 +18,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   public async validate(tokenPayload: JwtPayload) {
-    const user = await this.userService.findOneById(tokenPayload.id)
+    const user = await this.userService.send('findOneById', tokenPayload.id)
 
     if (!user) {
       throw new UnauthorizedException()

@@ -1,5 +1,5 @@
 {
-  "name": "@sergshulya/user-service",
+  "name": "@habit-tracker/user-service",
   "version": "0.0.1",
   "description": "",
   "author": "Sergey Shulyak <sergey.shulyak8@gmail.com>",
@@ -24,6 +24,7 @@
     "@nestjs/core": "^6.0.0",
     "@nestjs/microservices": "^6.3.1",
     "@nestjs/typeorm": "^6.1.2",
+    "@habit-tracker/shared": "^0.0.1",
     "@typescript-eslint/parser": "^1.10.2",
     "pg": "^7.11.0",
     "reflect-metadata": "^0.1.12",

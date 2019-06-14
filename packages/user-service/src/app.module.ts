@@ -6,12 +6,6 @@ import { UserModule } from './user/user.module'
 @Module({
   imports: [
     TypeOrmModule.forRoot(),
-    ClientsModule.register([
-      {
-        name: 'USER_SERVICE',
-        transport: Transport.TCP,
-      },
-    ]),
     UserModule,
   ],
 })
