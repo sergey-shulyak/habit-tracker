@@ -5,8 +5,13 @@
   "author": "Sergey Shulyak <sergey.shulyak8@gmail.com>",
   "repository": "https://github.com/sergey-shulyak/habit-tracker.git",
   "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "start:dev": "lerna run start:dev --stream --parallel",
+    "start:debug": "lerna run start:debug --stream --parallel",
     "start:docker": "docker-compose -f docker-compose.dev.yml up",
     "stop:docker": "docker-compose -f docker-compose.dev.yml down"
   },

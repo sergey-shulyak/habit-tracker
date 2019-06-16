@@ -13,12 +13,18 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       passReqToCallback: false,
-      secretOrKey: process.env.AUTH_JWT_SECRET,
+      secretOrKey: process.env.AUTH_JWT_SECRET || 'HD<-XdS,n3d#N3k!',
     })
   }
 
   public async validate(tokenPayload: JwtPayload) {
-    const user = await this.userService.send('findOneById', tokenPayload.id)
+    if (!tokenPayload.id) {
+      // TODO type
+      throw new Error('ID should be provided in jwt')
+    }
+    const user = await this.userService
+      .send('findOneById', tokenPayload.id)
+      .toPromise()
 
     if (!user) {
       throw new UnauthorizedException()

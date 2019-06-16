@@ -18,6 +18,6 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   }
 
   public validate(email: string, password: string) {
-    return this.authService.send('verifyUser', { email, password })
+    return this.authService.send('verifyUser', { email, password }).toPromise()
   }
 }

@@ -1,3 +1,5 @@
+import * as path from 'path'
+
 import { Module } from '@nestjs/common'
 import { PassportModule } from '@nestjs/passport'
 import { ClientsModule, Transport } from '@nestjs/microservices'
@@ -15,14 +17,21 @@ import { UserController } from './user/user.controller'
       defaultStrategy: 'jwt',
       session: false,
     }),
+
     ClientsModule.register([
       {
         name: USER_SERVICE,
         transport: Transport.TCP,
+        options: {
+          port: 3001,
+        },
       },
       {
         name: AUTH_SERVICE,
         transport: Transport.TCP,
+        options: {
+          port: 3002,
+        },
       },
     ]),
   ],

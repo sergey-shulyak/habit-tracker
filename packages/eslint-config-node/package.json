@@ -1,0 +1,21 @@
+{
+  "name": "@habit-tracker/eslint-config-node",
+  "version": "1.0.0",
+  "description": "Sharable config for services",
+  "author": "Sergey Shulyak <sergshulya@gmail.com>",
+  "homepage": "https://github.com/sergey-shulyak/habit-tracker#readme",
+  "license": "MIT",
+  "main": "index.js",
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^1.10.2",
+    "@typescript-eslint/parser": "^1.10.2",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^5.0.0",
+    "eslint-import-resolver-typescript": "^1.1.1",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-prettier": "^3.1.0",
+    "prettier": "^1.18.2",
+    "typescript": "^3.5.2",
+    "typescript-eslint-parser": "^22.0.0"
+  }
+}

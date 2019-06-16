@@ -30,7 +30,7 @@ export class UserController {
   @Get()
   @UseGuards(AuthGuard())
   public async findAll() {
-    return await this.userService.send('findAll', '')
+    return await this.userService.send('findAll', '').toPromise()
   }
 
   @Post()
@@ -41,7 +41,7 @@ export class UserController {
   @Get(':id')
   @UseGuards(AuthGuard())
   public async findOne(@Param('id') id: string) {
-    const user = await this.userService.send('findOneById', id)
+    const user = await this.userService.send('findOneById', id).toPromise()
 
     if (!user) {
       throw new UserNotFoundError()

@@ -20,9 +20,20 @@ export class UserController {
     return this.userService.create(user)
   }
 
-  @MessagePattern('findOne')
+  @MessagePattern('findOneById')
   public async findOne(id: string) {
     const user = await this.userService.findOneById(id)
+
+    if (!user) {
+      throw new UserNotFoundError()
+    }
+
+    return user
+  }
+
+  @MessagePattern('findOneByEmail')
+  public async findOneByEmal(email: string) {
+    const user = await this.userService.findOneByEmail(email)
 
     if (!user) {
       throw new UserNotFoundError()

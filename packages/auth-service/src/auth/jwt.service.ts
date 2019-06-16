@@ -12,6 +12,6 @@ const sign = promisify(jwt.sign) as (
 @Injectable()
 export class JwtService {
   public sign(user: JwtPayload) {
-    return sign(user, process.env.AUTH_JWT_SECRET)
+    return sign(user, process.env.AUTH_JWT_SECRET || 'HD<-XdS,n3d#N3k!')
   }
 }

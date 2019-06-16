@@ -17,6 +17,7 @@ export class UserService {
   }
 
   public create(user: IUser) {
+    Logger.debug('User created')
     return this.userRepository.save(user);
   }
 
