@@ -1,0 +1,51 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558 
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "start:debug",
+      "path": "packages/api-gateway/",
+      "problemMatcher": [
+        "$tsc-watch"
+      ],
+      "isBackground": true
+    },
+    {
+      "type": "npm",
+      "script": "start:debug",
+      "path": "packages/auth-service/",
+      "problemMatcher": [
+        "$tsc-watch"
+      ],
+      "isBackground": true
+    },
+    {
+      "type": "npm",
+      "script": "start:debug",
+      "path": "packages/user-service/",
+      "problemMatcher": [
+        "$tsc-watch"
+      ],
+      "isBackground": true
+    },
+    {
+      "type": "npm",
+      "script": "start:debug",
+      "path": "packages/mail-service/",
+      "problemMatcher": [
+        "$tsc-watch"
+      ],
+      "isBackground": true
+    },
+    {
+      "type": "npm",
+      "script": "start:debug",
+      "problemMatcher": [
+        "$tsc-watch"
+      ],
+      "isBackground": true
+    }
+  ]
+}

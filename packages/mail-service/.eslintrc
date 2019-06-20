@@ -1,0 +1,3 @@
+{
+  "extends": "@habit-tracker/eslint-config-node"
+}

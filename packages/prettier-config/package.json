@@ -1,0 +1,9 @@
+{
+  "name": "@habit-tracker/prettier-config",
+  "version": "1.0.0",
+  "description": "> TODO: description",
+  "author": "Sergey Shulyak <sergshulya@gmail.com>",
+  "homepage": "https://github.com/sergey-shulyak/habit-tracker#readme",
+  "license": "MIT",
+  "main": "index.js"
+}

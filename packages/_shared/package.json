@@ -1,0 +1,11 @@
+{
+  "name": "@habit-tracker/shared",
+  "version": "0.0.1",
+  "description": "Shared entities",
+  "main": "index.js",
+  "author": "Sergey Shulyak <sergey.shulyak8@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@habit-tracker/eslint-config-node": "^1.0.0"
+  }
+}

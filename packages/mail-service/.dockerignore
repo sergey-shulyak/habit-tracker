@@ -1,0 +1,4 @@
+# Production files
+node_modules/
+dist/
+.env
