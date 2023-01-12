@@ -28,7 +28,7 @@
     "@nestjs/passport": "^6.1.0",
     "@nestjs/platform-express": "^6.0.0",
     "class-transformer": "^0.2.3",
-    "class-validator": "^0.9.x",
+    "class-validator": "^0.14.x",
     "helmet": "^3.18.0",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
